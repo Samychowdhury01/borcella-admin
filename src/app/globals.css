@@ -9,7 +9,7 @@ body,
 }
 
 /* clerk css rewrite */
-.cl-internal-1dauvpw, .cl-internal-1dauvpw{
+.cl-internal-1dauvpw, .cl-internal-1hp5nqm {
   display: none !important;
 }
 
@@ -27,7 +27,7 @@ body,
 
     --popover-foreground: 240 10% 3.9%;
 
-    --primary: 240 5.9% 10%;
+    --primary: 210, 100%, 37%;
 
     --primary-foreground: 0 0% 98%;
 
@@ -51,7 +51,7 @@ body,
 
     --input: 240 5.9% 90%;
 
-    --ring: 240 10% 3.9%;
+    --ring: 210, 100%, 37%;
 
     --chart-1: 12 76% 61%;
 

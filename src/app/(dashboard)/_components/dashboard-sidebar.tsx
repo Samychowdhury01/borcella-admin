@@ -1,5 +1,5 @@
 "use client";
-import { Layout, Compass, List, BarChart } from "lucide-react";
+import { Layout, Tag, ShoppingBag, UsersRound, Shapes } from "lucide-react";
 
 import {
   Sidebar,
@@ -8,9 +8,11 @@ import {
   SidebarGroupContent,
   SidebarMenu,
 } from "@/components/ui/sidebar";
-import SidebarItem from "./sidebar-item";
 import { usePathname } from "next/navigation";
+
+import { UserButton } from "@clerk/nextjs";
 import Logo from "./logo";
+import SidebarItem from "./sidebar-item";
 
 // Menu items.
 const guestRoutes = [
@@ -20,42 +22,47 @@ const guestRoutes = [
     href: "/",
   },
   {
-    icon: Compass,
-    label: "Browse",
-    href: "/search",
-  },
-];
-
-const teachersRoutes = [
-  {
-    icon: List,
-    label: "Courses",
-    href: "/teacher/courses",
+    icon: Shapes,
+    label: "Collections",
+    href: "/collections",
   },
   {
-    icon: BarChart,
-    label: "Analytics",
-    href: "/teacher/analytics",
+    icon: Tag,
+    label: "Products",
+    href: "/products",
+  },
+  {
+    icon: ShoppingBag,
+    label: "Orders",
+    href: "/orders",
+  },
+  {
+    icon: UsersRound,
+    label: "Customers",
+    href: "/customers",
   },
 ];
 
 export function DashboardSidebar() {
   const pathname = usePathname();
 
-  const isTeachersRoute = pathname?.startsWith("/teacher");
-  const routes = isTeachersRoute ? teachersRoutes : guestRoutes;
+  const routes = guestRoutes;
   return (
     <Sidebar>
-      <SidebarContent  className="bg-blue-1/10 drop-shadow-2xl">
+      <SidebarContent className="bg-blue-2 shadow-xl">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <div className="h-10 m-auto p-4 mb-5">
-                <Logo/>
+                <Logo />
               </div>
               {routes.map((route) => (
                 <SidebarItem key={route.href} route={route} />
               ))}
+              <div className="flex items-center gap-x-2 pl-6 py-4 hover:text-slate-600 hover:bg-slate-300/20">
+                <UserButton />
+                Edit Profile
+              </div>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
