@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,8 +19,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/image-upload";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const CollectionForm = () => {
+  const router = useRouter();
   const form = useForm<TCreateCollectionFormSchema>({
     resolver: zodResolver(createCollectionFormSchema),
   });
@@ -35,7 +37,25 @@ const CollectionForm = () => {
 
   //   onSubmit function
   const onSubmit = async (values: TCreateCollectionFormSchema) => {
-    console.log(values);
+   console.log(values)
+    try {
+      const response = await fetch("/api/collections", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success("Collection created successfully");
+        router.push("/collections");
+        reset();
+      }
+    } catch (error) {
+      console.log("[ERROR at collection onSubmit]:", error);
+      toast.error("Something went wrong!");
+    }
   };
 
   //   error handler
@@ -101,9 +121,19 @@ const CollectionForm = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting}>
-              Submit
-            </Button>
+            <div className="flex items-center gap-4">
+              <Button type="submit" disabled={isSubmitting}>
+                Submit
+              </Button>
+              <Button
+                type="button"
+                variant={"ghost"}
+                onClick={() => router.push("/collections")}
+                disabled={isSubmitting}
+              >
+                Discard
+              </Button>
+            </div>
           </form>
         </Form>
       </div>
