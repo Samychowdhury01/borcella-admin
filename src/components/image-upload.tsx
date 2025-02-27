@@ -26,10 +26,13 @@ const ImageUpload = ({ value, onChange, onRemove }: ImageUploadProps) => {
                 alt="collection-image"
                 className="object-cover rounded-lg"
               />
-              <Button className="absolute top-1 right-1 rounded-full" variant={"destructive"} size={"icon"} 
-              onClick={()=> onRemove(url)}
+              <Button
+                className="absolute top-1 right-1 rounded-full"
+                variant={"destructive"}
+                size={"icon"}
+                onClick={() => onRemove(url)}
               >
-                <Trash className="h-5 w-5 "/>
+                <Trash className="h-5 w-5 " />
               </Button>
             </div>
           ))}

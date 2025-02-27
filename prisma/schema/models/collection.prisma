@@ -10,10 +10,17 @@ model Collection {
 
 model Product {
     id           String     @id @default(auto()) @map("_id") @db.ObjectId
-    name         String     @unique
+    title        String     @unique
     description  String
-    price        Int
-    images       String[]
+    media        String[]
+    category     String
     collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
     collectionId String     @db.ObjectId
+    tags         String[]
+    sizes        String[]
+    colors       String[]
+    price        Int
+    expense      Int
+    createdAt    DateTime   @default(now())
+    updatedAt    DateTime   @updatedAt
 }
