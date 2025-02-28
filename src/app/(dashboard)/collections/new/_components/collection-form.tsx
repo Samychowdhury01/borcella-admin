@@ -1,6 +1,5 @@
 "use client";
 
-import { Separator } from "@/components/ui/separator";
 import {
   createCollectionFormSchema,
   TCreateCollectionFormSchema,
@@ -21,11 +20,21 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/image-upload";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { Collection } from "@prisma/client";
 
-const CollectionForm = () => {
+interface CollectionFormProps {
+  initialData?: Collection;
+}
+
+const CollectionForm = ({ initialData }: CollectionFormProps) => {
   const router = useRouter();
   const form = useForm<TCreateCollectionFormSchema>({
     resolver: zodResolver(createCollectionFormSchema),
+    defaultValues: {
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      imageUrl: initialData?.imageUrl || "",
+    },
   });
 
   //   destructing the important fields from form
@@ -37,7 +46,7 @@ const CollectionForm = () => {
 
   //   onSubmit function
   const onSubmit = async (values: TCreateCollectionFormSchema) => {
-   console.log(values)
+    console.log(values);
     try {
       const response = await fetch("/api/collections", {
         method: "POST",
@@ -61,10 +70,7 @@ const CollectionForm = () => {
   //   error handler
   const onError = (errors: any) => console.log(errors);
   return (
-    <div className="p-10">
-      <p className="text-heading2-bold text-gray-1">Create Collection</p>
-      <Separator className="mt-4 mb-7 bg-gray-1" />
-
+    <div>
       {/* form  */}
       <div>
         <Form {...form}>
@@ -112,8 +118,8 @@ const CollectionForm = () => {
                   <FormControl>
                     <ImageUpload
                       value={field.value ? [field.value] : []}
-                      onChange={(url: string) => field.onChange(url)}
-                      onRemove={() => field.onChange("")}
+                      onChange={(url) => field.onChange(url[0])}
+                      isMultiple={false}
                     />
                   </FormControl>
 

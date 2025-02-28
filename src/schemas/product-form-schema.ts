@@ -15,16 +15,16 @@ export const createProductFormSchema = z.object({
     .trim(),
   media: z.array(string()),
   category: z.string(),
-  collections: z.array(string()),
+  collectionIds: z.array(string()),
   tags: z.array(string()),
   sizes: z.array(string()),
   colors: z.array(string()),
-  price: z.number()
+  price: z.coerce.number()
   .positive()
   .min(1, {
     message: "Price must be greater than 0",
   }),
-  expense: z.number()
+  expense: z.coerce.number()
   .positive()
   .min(1, {
     message: "Expense must be greater than 0",
