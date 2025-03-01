@@ -24,13 +24,13 @@ export const getSingleProduct = async (productId: string) => {
     return null;
   }
   // Get single collection by id
-  const collection = await prisma.product.findUnique({
+  const product = await prisma.product.findUnique({
     where: {
       id: productId,
     },
   });
-  if (!collection) {
+  if (!product) {
     return null;
   }
-  return collection;
+  return product;
 };

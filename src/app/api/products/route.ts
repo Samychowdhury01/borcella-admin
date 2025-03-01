@@ -4,9 +4,8 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
+    // Authenticate user
     const { userId } = await auth();
-    const product = await req.json();
-
     if (!userId) {
       return NextResponse.json({
         statusCode: 401,
@@ -16,25 +15,73 @@ export async function POST(req: Request) {
       });
     }
 
+    // Parse request body
+    const product = await req.json();
+    const {
+      title,
+      description,
+      media,
+      category,
+      collectionIds = [],
+      tags = [],
+      sizes = [],
+      colors = [],
+      price,
+      expense,
+    } = product;
+
+    // Input validation (Ensure required fields are present)
+    if (!title || !description || !price || !expense) {
+      return NextResponse.json({
+        statusCode: 400,
+        success: false,
+        message: "Missing required fields",
+        data: [],
+      });
+    }
+
+    // Check if product already exists
     const isProductExist = await prisma.product.findUnique({
-      where: {
-        title: product.title,
-      },
+      where: { title },
     });
 
     if (isProductExist) {
       return NextResponse.json({
         statusCode: 400,
         success: false,
-        message: "product already exists",
+        message: "Product already exists",
         data: [],
       });
     }
+
+    // Create the new product
     const newProduct = await prisma.product.create({
       data: {
-        ...product,
+        title,
+        description,
+        media,
+        category,
+        collectionIds,
+        tags,
+        sizes,
+        colors,
+        price,
+        expense,
       },
     });
+
+    // Update linked collections to add the new product ID
+    await Promise.all(
+      collectionIds.map((collectionId: string) =>
+        prisma.collection.update({
+          where: { id: collectionId },
+          data: {
+            productIds: { push: newProduct.id }, 
+          },
+        })
+      )
+    );
+
     return NextResponse.json({
       statusCode: 201,
       success: true,
@@ -42,7 +89,7 @@ export async function POST(req: Request) {
       data: newProduct,
     });
   } catch (error) {
-    console.log("[ERROR at product]:", error);
+    console.error("[ERROR at product]:", error);
     return NextResponse.json({
       statusCode: 500,
       success: false,

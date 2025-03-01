@@ -10,6 +10,7 @@ const EditProductPage = async ({
 }) => {
   const { productId } = await params;
   const productDetails = await getSingleProduct(productId);
+  console.log(productDetails, "product page");
   const isProductExist = productDetails !== null;
   if (!isProductExist) {
     return redirect("/collections");
@@ -20,7 +21,7 @@ const EditProductPage = async ({
         <p className="text-heading2-bold text-gray-1">Edit Collection</p>
         <Separator className="mt-4 mb-7 bg-gray-1" />
       </div>
-      <ProductForm initialData={productDetails!} />
+      <ProductForm initialData={productDetails!} HTTPType="PUT" />
     </section>
   );
 };

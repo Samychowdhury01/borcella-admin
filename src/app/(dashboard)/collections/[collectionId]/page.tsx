@@ -20,7 +20,7 @@ const EditCollectionPage = async ({
         <p className="text-heading2-bold text-gray-1">Edit Collection</p>
         <Separator className="mt-4 mb-7 bg-gray-1" />
       </div>
-      <CollectionForm initialData={collectionDetails!} />
+      <CollectionForm initialData={collectionDetails!} HTTPType="PUT"/>
     </section>
   );
 };

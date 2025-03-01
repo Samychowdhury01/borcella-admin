@@ -9,7 +9,7 @@ const AddNewProductPage = () => {
             <p className="text-heading2-bold text-gray-1">Create Collection</p>
             <Separator className="mt-4 mb-7 bg-gray-1" />
             </div>
-         <ProductForm/>   
+         <ProductForm HTTPType='POST'/>   
         </section>
     );
 };

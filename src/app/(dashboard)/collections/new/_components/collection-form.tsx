@@ -24,9 +24,19 @@ import { Collection } from "@prisma/client";
 
 interface CollectionFormProps {
   initialData?: Collection;
+  HTTPType: "POST" | "PUT";
 }
 
-const CollectionForm = ({ initialData }: CollectionFormProps) => {
+const CollectionForm = ({ initialData, HTTPType }: CollectionFormProps) => {
+  const message =
+    HTTPType === "POST"
+      ? "Collection Created Successfully!"
+      : "Collection Updated Successfully!";
+  const api =
+    HTTPType === "POST"
+      ? "/api/collections"
+      : `/api/collections/${initialData?.id}`;
+      
   const router = useRouter();
   const form = useForm<TCreateCollectionFormSchema>({
     resolver: zodResolver(createCollectionFormSchema),
@@ -46,10 +56,9 @@ const CollectionForm = ({ initialData }: CollectionFormProps) => {
 
   //   onSubmit function
   const onSubmit = async (values: TCreateCollectionFormSchema) => {
-    console.log(values);
     try {
-      const response = await fetch("/api/collections", {
-        method: "POST",
+      const response = await fetch(api, {
+        method: HTTPType === "POST" ? "POST" : "PUT",
         headers: {
           "Content-Type": "application/json",
         },
@@ -57,7 +66,7 @@ const CollectionForm = ({ initialData }: CollectionFormProps) => {
       });
       const data = await response.json();
       if (data.success) {
-        toast.success("Collection created successfully");
+        toast.success(data?.message || message);
         router.push("/collections");
         reset();
       }

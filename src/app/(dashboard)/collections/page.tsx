@@ -9,7 +9,7 @@ import { getCollections } from "@/actions/collection-action";
 
 const CollectionsPage = async () => {
   const collections = await getCollections();
-
+  console.log(collections, "collections page");
   return (
     <section className="p-10">
       {/* title and new collection add button */}

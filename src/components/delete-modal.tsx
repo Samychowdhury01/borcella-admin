@@ -38,7 +38,7 @@ const DeleteModal = ({
         const data = await response.json();
         console.log(data);
         if (data.success) {
-          toast.success("Collection Deleted successfully");
+          toast.success(data?.message || "Deleted Successfully!");
           router.refresh();
         }
       } catch (error) {
