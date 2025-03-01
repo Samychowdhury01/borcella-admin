@@ -13,12 +13,12 @@ export const createProductFormSchema = z.object({
       message: "Description must be 500 characters or less",
     })
     .trim(),
-  media: z.array(string()),
+  media: z.array(string()).nonempty(),
   category: z.string(),
-  collectionIds: z.array(string()),
-  tags: z.array(string()),
-  sizes: z.array(string()),
-  colors: z.array(string()),
+  collectionIds: z.array(string()).nonempty(),
+  tags: z.array(string()).nonempty(),
+  sizes: z.array(string()).nonempty(),
+  colors: z.array(string()).nonempty(),
   price: z.coerce.number()
   .positive()
   .min(1, {

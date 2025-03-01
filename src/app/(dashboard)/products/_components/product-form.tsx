@@ -24,9 +24,13 @@ import MultiText from "@/components/ui/multi-text";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useEffect, useState } from "react";
 import { getCollections } from "@/actions/collection-action";
-import { Collection } from "@prisma/client";
+import { Collection, Product } from "@prisma/client";
 
-const ProductForm = () => {
+interface CollectionFormProps {
+  initialData?: Product;
+}
+
+const ProductForm = ({ initialData }: CollectionFormProps) => {
   const [collections, setCollections] = useState<
     {
       value: string;
@@ -37,16 +41,16 @@ const ProductForm = () => {
   const form = useForm<TCreateProductFormSchema>({
     resolver: zodResolver(createProductFormSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      price: 0,
-      expense: 0,
-      media: [],
-      category: "",
-      collectionIds: [],
-      tags: [],
-      sizes: [],
-      colors: [],
+      title: initialData?.title || "",
+      description: initialData?.description || "",
+      price: Number(initialData?.price) || 0,
+      expense: Number(initialData?.expense) || 0,
+      media: initialData?.media || [],
+      category: initialData?.category || "",
+      collectionIds: initialData?.collectionIds || [],
+      tags: initialData?.tags || [],
+      sizes: initialData?.sizes || [],
+      colors: initialData?.colors || [],
     },
   });
 
@@ -80,25 +84,25 @@ const ProductForm = () => {
   //   onSubmit function
   const onSubmit = async (values: TCreateProductFormSchema) => {
     console.log(values);
-    console.log('g')
-    // try {
-    //   const response = await fetch("/api/collections", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(values),
-    //   });
-    //   const data = await response.json();
-    //   if (data.success) {
-    //     toast.success("Collection created successfully");
-    //     router.push("/collections");
-    //     reset();
-    //   }
-    // } catch (error) {
-    //   console.log("[ERROR at collection onSubmit]:", error);
-    //   toast.error("Something went wrong!");
-    // }
+
+    try {
+      const response = await fetch("/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success("Product created successfully");
+        router.push("/products");
+        reset();
+      }
+    } catch (error) {
+      console.log("[ERROR at collection onSubmit]:", error);
+      toast.error("Something went wrong!");
+    }
   };
 
   //   error handler

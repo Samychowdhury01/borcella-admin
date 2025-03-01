@@ -15,7 +15,13 @@ import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import toast from "react-hot-toast";
-const DeleteCollection = ({ id }: { id: string }) => {
+const DeleteModal = ({
+  id,
+  itemType,
+}: {
+  id: string;
+  itemType: "products" | "collections";
+}) => {
   const [loading, startTransition] = useTransition();
   const router = useRouter();
 
@@ -23,14 +29,14 @@ const DeleteCollection = ({ id }: { id: string }) => {
   const onDelete = () => {
     startTransition(async () => {
       try {
-        const response = await fetch(`/api/collections/${id}`, {
+        const response = await fetch(`/api/${itemType}/${id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
         });
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         if (data.success) {
           toast.success("Collection Deleted successfully");
           router.refresh();
@@ -44,7 +50,7 @@ const DeleteCollection = ({ id }: { id: string }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size={"icon"}>
+        <Button variant="destructive" size={"icon"} className="bg-red-400">
           <Trash className="size-4" />
         </Button>
       </AlertDialogTrigger>
@@ -73,4 +79,4 @@ const DeleteCollection = ({ id }: { id: string }) => {
   );
 };
 
-export default DeleteCollection;
+export default DeleteModal;

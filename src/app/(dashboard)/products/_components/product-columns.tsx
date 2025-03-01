@@ -1,38 +1,51 @@
 "use client";
-import { Collection, Product } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { PenIcon } from "lucide-react";
 import Link from "next/link";
+import { Collection, Product } from "@prisma/client";
 import DeleteModal from "@/components/delete-modal";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
-export const CollectionColumns: ColumnDef<
-  Collection & { products: Product[] }
+export const productColumns: ColumnDef<
+  Product & { collections: Collection[] }
 >[] = [
   {
     accessorKey: "title",
     header: "Title",
   },
   {
-    accessorKey: "products",
+    accessorKey: "category",
     header: "Products",
-    cell: ({ row }) => <p>{row.original.products.length}</p>,
+  },
+  {
+    accessorKey: "collections",
+    header: "Collections",
+    cell: ({ row }) =>
+      row.original.collections.map((collection) => collection.title).join(", "),
+  },
+  {
+    accessorKey: "price",
+    header: "Price ($)",
+  },
+  {
+    accessorKey: "expense",
+    header: "Cost ($)",
   },
   {
     accessorKey: "action",
-    header: "Actions",
+    header: "",
     cell: ({ row }) => (
       <div className="flex gap-x-2">
         <Button asChild variant={"ghost"} className="hover:text-primary">
-          <Link href={`/collections/${row.original.id}`}>
-          <PenIcon/>
+          <Link href={`/products/${row.original.id}`}>
+            <PenIcon />
           </Link>
         </Button>
-        <DeleteModal id={row.original.id} itemType="collections"/>
+        <DeleteModal id={row.original.id} itemType="products" />
       </div>
-    )
+    ),
   },
 ];
