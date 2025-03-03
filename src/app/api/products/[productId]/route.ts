@@ -167,3 +167,33 @@ export async function PUT(
     });
   }
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ productId: string }> }
+) {
+  try {
+    const { productId } = await params;
+    const product = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+    if (!product) {
+      return NextResponse.json({
+        statusCode: 404,
+        success: false,
+        message: "No product found!",
+        data: [],
+      });
+    }
+    return NextResponse.json({
+      statusCode: 201,
+      success: true,
+      message: "Product retrieved successfully",
+      data: product,
+    });
+  } catch (error) {
+    console.log("[ERROR: at [productId] GET method]", error);
+  }
+}

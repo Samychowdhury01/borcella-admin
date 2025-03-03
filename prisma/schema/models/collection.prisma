@@ -10,19 +10,64 @@ model Collection {
 }
 
 model Product {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  title        String       @unique
-  description  String
-  media        String[]
-  category     String
-  collections  Collection[] @relation(fields: [collectionIds], references: [id])
-  collectionIds String[]    @db.ObjectId
-  tags         String[]
-  sizes        String[]
-  colors       String[]
-  price        Int
-  expense      Int
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  title         String         @unique
+  description   String
+  media         String[]
+  category      String
+  collections   Collection[]   @relation(fields: [collectionIds], references: [id])
+  collectionIds String[]       @db.ObjectId
+  tags          String[]
+  sizes         String[]
+  colors        String[]
+  price         Int
+  expense       Int
+  orders        ProductOrder[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
+model Order {
+  id              String           @id @default(auto()) @map("_id") @db.ObjectId
+  customerClerkId String
+  products        ProductOrder[]
+  customer        Customer         @relation(fields: [customerId], references: [id])
+  customerId      String           @db.ObjectId 
+  shippingAddress ShippingAddress?
+  shippingRate    String
+  totalAmount     Float
+  createdAt       DateTime         @default(now())
+}
+
+model ProductOrder {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   String  @db.ObjectId
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.ObjectId
+  color     String
+  size      String
+  quantity  Int
+}
+
+model ShippingAddress {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  order      Order   @relation(fields: [orderId], references: [id])
+  orderId    String  @unique @db.ObjectId
+  street     String?
+  city       String?
+  state      String?
+  postalCode String?
+  country    String?
+}
+
+model Customer {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String   @unique
+  name      String
+  email     String
+  orders    Order[]
+  orderIds  String[] @db.ObjectId @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

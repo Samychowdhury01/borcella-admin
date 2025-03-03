@@ -51,3 +51,35 @@ export async function POST(req: Request) {
     });
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const collections = await prisma.collection.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    if (!collections) {
+      return NextResponse.json({
+        statusCode: 404,
+        success: false,
+        message: "No collections found!",
+        data: [],
+      });
+    }
+    return NextResponse.json({
+      statusCode: 201,
+      success: true,
+      message: "Collections retrieved successfully",
+      data: collections,
+    });
+  } catch (error) {
+    console.log("[ERROR: at collection GET method]", error);
+    return NextResponse.json({
+      statusCode: 500,
+      success: false,
+      message: "Internal server error",
+      data: [],
+    });
+  }
+}

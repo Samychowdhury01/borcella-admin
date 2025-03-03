@@ -98,3 +98,30 @@ export async function POST(req: Request) {
     });
   }
 }
+
+
+export async function GET(req: Request) {
+  try {
+    const products = await prisma.product.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    if (!products) {
+      return NextResponse.json({
+        statusCode: 404,
+        success: false,
+        message: "No products found!",
+        data: [],
+      });
+    }
+    return NextResponse.json({
+      statusCode: 201,
+      success: true,
+      message: "Products retrieved successfully",
+      data: products,
+    });
+  } catch (error) {
+    console.log("[ERROR: at products GET method]", error);
+  }
+}
