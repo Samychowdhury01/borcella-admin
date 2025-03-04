@@ -8,22 +8,17 @@ const OrdersPage = async () => {
   const orders = await getAllOrders();
   console.log(orders);
   return (
-    <section  className="p-10">
+    <section className="p-10">
       {/* title and separator */}
       <div>
-        <div className="flex items-center justify-between">
-          <p className="text-heading2-bold text-gray-1"> Orders</p>
-        </div>
+        <p className="text-heading2-bold text-gray-1"> Orders</p>
+
         <Separator className="mt-4 mb-7 bg-gray-1" />
       </div>
       {/* table to show the order list */}
-            <div>
-              <DataTable
-                columns={orderColumns}
-                data={orders}
-                searchKey="id"
-              />
-            </div>
+      <div>
+        <DataTable columns={orderColumns} data={orders} searchKey="id" />
+      </div>
     </section>
   );
 };

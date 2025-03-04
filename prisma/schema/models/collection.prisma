@@ -27,6 +27,7 @@ model Product {
   updatedAt     DateTime       @updatedAt
 }
 
+
 model Order {
   id              String           @id @default(auto()) @map("_id") @db.ObjectId
   customerClerkId String

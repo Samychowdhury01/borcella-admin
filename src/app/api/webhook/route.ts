@@ -9,7 +9,8 @@ export async function POST(req: Request) {
   const body = await req.text();
   const signature = (await headers()).get("Stripe-Signature") as string;
   let event: Stripe.Event;
-
+  console.log("Raw Body:", body); // Check against Stripe's dashboard payload
+  console.log("Signature Header:", signature);
   try {
     event = stripe.webhooks.constructEvent(
       body,
@@ -91,6 +92,7 @@ export async function POST(req: Request) {
         where: { clerkId: customerClerkId },
         data: { orderIds: { push: createNewOrder.id } },
       });
+      console.log(customer, 'from webhook')
 
       return NextResponse.json({
         statusCode: 200,

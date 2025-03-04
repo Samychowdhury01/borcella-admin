@@ -19,7 +19,7 @@ export const orderItemsColumn: ColumnDef<
       return (
         <Link
           href={`/products/${row.original.product.id}`}
-          className="hover:text-red-1"
+          className="hover:text-gray-1"
         >
           {row.original.product.title}
         </Link>

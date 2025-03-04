@@ -21,7 +21,7 @@ export const orderColumns: ColumnDef<
     cell: ({ row }) => (
       <Link
         href={`/orders/${row.original.id}`}
-        className="hover:text-destructive"
+        className="hover:text-gray-1"
       >
         {row.original.id}
       </Link>
