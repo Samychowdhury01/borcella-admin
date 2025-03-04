@@ -10,7 +10,7 @@ export const getTotalSales = async () => {
   const orders = await prisma.order.findMany({});
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce(
-    (acc: number, order) => acc + order.totalAmount,
+    (acc: number, order: any) => acc + order.totalAmount,
     0
   );
   return {
@@ -31,7 +31,7 @@ export const getTotalCustomers = async () => {
 
 export const getSalesPerMonth = async () => {
   const orders = await prisma.order.findMany({});
-  const salesPerMonth = orders.reduce((acc: any, order) => {
+  const salesPerMonth = orders.reduce((acc: any, order: any) => {
     const monthIndex = new Date(order.createdAt).getMonth();
     acc[monthIndex] = (acc[monthIndex] || 0) + order.totalAmount;
     return acc;
