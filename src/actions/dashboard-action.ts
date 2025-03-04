@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import { Order } from "@prisma/client";
 
 export const getTotalSales = async () => {
   const { userId } = await auth();
@@ -10,7 +11,7 @@ export const getTotalSales = async () => {
   const orders = await prisma.order.findMany({});
   const totalOrders = orders.length;
   const totalRevenue = orders.reduce(
-    (acc: number, order) => acc + order.totalAmount,
+    (acc: number, order: Order) => acc + order.totalAmount,
     0
   );
   return {
@@ -31,7 +32,7 @@ export const getTotalCustomers = async () => {
 
 export const getSalesPerMonth = async () => {
   const orders = await prisma.order.findMany({});
-  const salesPerMonth = orders.reduce((acc: any, order) => {
+  const salesPerMonth = orders.reduce((acc: any, order: Order) => {
     const monthIndex = new Date(order.createdAt).getMonth();
     acc[monthIndex] = (acc[monthIndex] || 0) + order.totalAmount;
     return acc;
