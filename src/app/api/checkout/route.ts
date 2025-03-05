@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
         },
         quantity: cartItem.quantity,
       })),
-      client_reference_id: customer.clerkId,
+      client_reference_id: customer.userId,
       success_url: `${process.env.ECOMMERCE_STORE_URL}/payment-success`,
       cancel_url: `${process.env.ECOMMERCE_STORE_URL}/cart`,
     });

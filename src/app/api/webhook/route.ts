@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
       // Customer Info
       const customerInfo = {
-        clerkId: customerClerkId,
+        userId: customerClerkId,
         name: session.customer_details?.name || "",
         email: session.customer_details?.email || "",
       };
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
       // Find or create customer
       let customer = await prisma.customer.findUnique({
-        where: { clerkId: customerClerkId },
+        where: { userId: customerClerkId },
       });
 
       if (!customer) {
@@ -83,13 +83,13 @@ export async function POST(req: Request) {
           totalAmount: session.amount_total ? session.amount_total / 100 : 0,
           shippingRate: session.metadata?.shippingRate || "standard",
           products: { create: orderItems || [] },
-          customerClerkId: customerInfo.clerkId,
+          customerClerkId: customerInfo.userId,
         },
       });
 
       // Update customer with new order ID
       await prisma.customer.update({
-        where: { clerkId: customerClerkId },
+        where: { userId: customerClerkId },
         data: { orderIds: { push: createNewOrder.id } },
       });
       console.log(customer, 'from webhook')

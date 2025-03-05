@@ -6,8 +6,8 @@ import Link from "next/link";
 
 export const customerColumns: ColumnDef<Customer>[] = [
   {
-    accessorKey: "clerkId",
-    header: "Clerk ID",
+    accessorKey: "userId",
+    header: "User ID",
     // cell: ({ row }) => (
     //   <Link href={`/orders/${row.original.id}`} className="hover:text-gray-1">
     //     {row.original.id}
