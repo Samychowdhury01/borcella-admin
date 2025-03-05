@@ -6,7 +6,6 @@ import { orderColumns } from "./_components/order-columns";
 
 const OrdersPage = async () => {
   const orders = await getAllOrders();
-  console.log(orders);
   return (
     <section className="p-10">
       {/* title and separator */}
