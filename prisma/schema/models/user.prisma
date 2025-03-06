@@ -1,0 +1,8 @@
+model SignUp {
+    id       String @id @default(auto()) @map("_id") @db.ObjectId
+    email    String
+    password String
+    name     String
+
+    @@unique([email])
+}

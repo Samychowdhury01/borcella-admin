@@ -1,8 +1,10 @@
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+
 
 export const getTotalSales = async () => {
-  const { userId } = await auth();
+    const session = await auth();
+      const userId = session?.user?.id;
 
   if (!userId) {
     return {};
@@ -20,7 +22,8 @@ export const getTotalSales = async () => {
 };
 
 export const getTotalCustomers = async () => {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   if (!userId) {
     return 0;
   }

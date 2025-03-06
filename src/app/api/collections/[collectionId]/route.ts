@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
 // get single collection
@@ -51,7 +51,8 @@ export async function PUT(
 ) {
   try {
     const { collectionId } = await params;
-    const { userId } = await auth();
+      const session = await auth();
+        const userId = session?.user?.id;
     const updatableValues = await req.json();
 
     if (!userId) {
@@ -116,7 +117,8 @@ export async function DELETE(
 ) {
   try {
     const { collectionId } = await params;
-    const { userId } = await auth();
+      const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
       return NextResponse.json({

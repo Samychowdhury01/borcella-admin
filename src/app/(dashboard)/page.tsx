@@ -7,8 +7,16 @@ import {
   getTotalSales,
 } from "@/actions/dashboard-action";
 import { CircleDollarSign, ShoppingBag, UserRound } from "lucide-react";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export default async function HomePage() {
+  const session = await auth();
+
+  if (!session) {
+    redirect("/auth");
+  }
+
   const totalRevenue = await getTotalSales().then((data) => data.totalRevenue);
   const totalOrders = await getTotalSales().then((data) => data.totalOrders);
   const totalCustomers = await getTotalCustomers();

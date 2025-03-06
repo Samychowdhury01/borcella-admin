@@ -1,5 +1,12 @@
 "use client";
-import { Layout, Tag, ShoppingBag, UsersRound, Shapes } from "lucide-react";
+import {
+  Layout,
+  Tag,
+  ShoppingBag,
+  UsersRound,
+  Shapes,
+  LogOut,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -13,6 +20,8 @@ import { usePathname } from "next/navigation";
 import { UserButton } from "@clerk/nextjs";
 import Logo from "./logo";
 import SidebarItem from "./sidebar-item";
+import { Button } from "@/components/ui/button";
+import { signOut } from "next-auth/react";
 
 // Menu items.
 const guestRoutes = [
@@ -59,10 +68,13 @@ export function DashboardSidebar() {
               {routes.map((route) => (
                 <SidebarItem key={route.href} route={route} />
               ))}
-              <div className="flex items-center gap-x-2 pl-6 py-4 hover:text-slate-600 hover:bg-slate-300/20">
-                <UserButton />
-                Edit Profile
-              </div>
+              <Button
+                onClick={() => signOut({ redirectTo: "/" })}
+                className="cursor-pointer flex items-center justify-start gap-x-1 ml-6 mt-5 w-1/2"
+              >
+                <LogOut />
+                <p>Sign Out</p>
+              </Button>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

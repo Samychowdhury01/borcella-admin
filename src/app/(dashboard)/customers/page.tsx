@@ -1,15 +1,17 @@
 import { getAllCustomers } from "@/actions/customer-action";
 import { DataTable } from "@/components/data-table";
 import { Separator } from "@/components/ui/separator";
-import { auth } from "@clerk/nextjs/server";
+
 import { redirect } from "next/navigation";
 import React from "react";
 import { customerColumns } from "./_components/customer-columns";
+import { auth } from "@/auth";
 
 const CustomersPage = async () => {
-  const { userId } = await auth();
+        const session = await auth();
+          const userId = session?.user?.id;
 
-  if (!userId) {
+  if (!userId || !session) {
     return redirect("/");
   }
 

@@ -1,10 +1,11 @@
 "use server";
 
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
 
 export const getCollections = async () => {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
 
   if (!userId) {
     return [];
@@ -19,7 +20,8 @@ export const getCollections = async () => {
 };
 
 export const getSingleCollection = async (collectionId: string) => {
-  const { userId } = await auth();
+  const session = await auth();
+  const userId = session?.user?.id;
   if (!userId) {
     return null;
   }

@@ -1,10 +1,12 @@
 "use server";
 
+import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+
 
 export const getProducts = async () => {
-  const { userId } = await auth();
+    const session = await auth();
+      const userId = session?.user?.id;
 
   if (!userId) {
     return [];
@@ -19,7 +21,8 @@ export const getProducts = async () => {
 };
 
 export const getSingleProduct = async (productId: string) => {
-  const { userId } = await auth();
+    const session = await auth();
+    const userId = session?.user?.id;
   if (!userId) {
     return null;
   }
