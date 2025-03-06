@@ -9,8 +9,8 @@ export async function DELETE(
 ) {
   try {
     const { productId } = await params;
-      const session = await auth();
-        const userId = session?.user?.id;
+    const session = await auth();
+    const userId = session?.user?.id;
 
     if (!userId) {
       return NextResponse.json({
@@ -62,7 +62,7 @@ export async function PUT(
 ) {
   try {
     const { productId } = await params;
-      const session = await auth();
+    const session = await auth();
     const userId = session?.user?.id;
     const updatableValues = await req.json();
 
@@ -189,12 +189,21 @@ export async function GET(
         data: [],
       });
     }
-    return NextResponse.json({
-      statusCode: 201,
-      success: true,
-      message: "Product retrieved successfully",
-      data: product,
-    });
+    return NextResponse.json(
+      {
+        statusCode: 201,
+        success: true,
+        message: "Product retrieved successfully",
+        data: product,
+      },
+      {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+      }
+    );
   } catch (error) {
     console.log("[ERROR: at [productId] GET method]", error);
   }
