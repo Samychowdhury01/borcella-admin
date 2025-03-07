@@ -4,8 +4,8 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-      const session = await auth();
-        const userId = session?.user?.id;
+    const session = await auth();
+    const userId = session?.user?.id;
     const collection = await req.json();
 
     if (!userId) {
@@ -56,8 +56,12 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const collections = await prisma.collection.findMany({
-      orderBy: {
-        createdAt: "desc",
+      include: {
+        products: {
+          include: {
+            _count: true,
+          },
+        },
       },
     });
     if (!collections) {
