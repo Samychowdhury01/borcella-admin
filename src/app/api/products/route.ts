@@ -126,3 +126,4 @@ export async function GET(req: Request) {
     console.log("[ERROR: at products GET method]", error);
   }
 }
+
