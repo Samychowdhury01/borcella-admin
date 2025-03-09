@@ -23,6 +23,7 @@ model Product {
   price         Int
   expense       Int
   orders        ProductOrder[]
+  faqs           FAQs?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }

@@ -1,12 +1,13 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
+import { generateFAQs } from "@/lib/generateFAQ";
 
 export async function POST(req: Request) {
   try {
     // Authenticate user
-      const session = await auth();
-        const userId = session?.user?.id;
+    const session = await auth();
+    const userId = session?.user?.id;
     if (!userId) {
       return NextResponse.json({
         statusCode: 401,
@@ -77,11 +78,26 @@ export async function POST(req: Request) {
         prisma.collection.update({
           where: { id: collectionId },
           data: {
-            productIds: { push: newProduct.id }, 
+            productIds: { push: newProduct.id },
           },
         })
       )
     );
+
+    // generate faq
+    const faqs = await generateFAQs(newProduct)
+       // Create product with FAQs
+       await prisma.fAQs.create({
+        data: {
+          productId: newProduct.id,
+          faqs: {
+            create: faqs.map((faq: { question: string; answer: string }) => ({
+              question: faq.question,
+              answer: faq.answer,
+            })),
+          },
+        },
+      });
 
     return NextResponse.json({
       statusCode: 201,
@@ -99,7 +115,6 @@ export async function POST(req: Request) {
     });
   }
 }
-
 
 export async function GET(req: Request) {
   try {
@@ -126,4 +141,3 @@ export async function GET(req: Request) {
     console.log("[ERROR: at products GET method]", error);
   }
 }
-

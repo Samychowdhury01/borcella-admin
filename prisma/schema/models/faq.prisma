@@ -1,0 +1,16 @@
+model FAQs {
+    id        String       @id @default(auto()) @map("_id") @db.ObjectId
+    product   Product      @relation(fields: [productId], references: [id])
+    productId String       @unique @db.ObjectId
+    faqs      FaqPattern[]
+}
+
+model FaqPattern {
+    id       String @id @default(auto()) @map("_id") @db.ObjectId
+    question String
+    answer   String
+    faq      FAQs   @relation(fields: [faqId], references: [id])
+    faqId    String @db.ObjectId
+}
+
+
