@@ -24,6 +24,9 @@ export async function DELETE(
       where: {
         id: productId,
       },
+      include: {
+        faqs: true,
+      },
     });
     if (!isProductExist) {
       return NextResponse.json({
@@ -33,16 +36,29 @@ export async function DELETE(
         data: [],
       });
     }
-    const deleteProduct = await prisma.product.delete({
+
+    if (isProductExist.faqs) {
+      // Delete all FaqPatterns associated with the FAQs
+      await prisma.faqPattern.deleteMany({
+        where: { faqId: isProductExist.faqs.id },
+      });
+
+      // Delete the FAQs entry
+      await prisma.fAQs.delete({
+        where: { id: isProductExist.faqs.id },
+      });
+    }
+     await prisma.product.delete({
       where: {
-        id: productId,
+        id: isProductExist.id,
       },
     });
+
     return NextResponse.json({
       statusCode: 200,
       success: true,
       message: "product deleted successfully",
-      data: deleteProduct,
+      data: [],
     });
   } catch (error) {
     console.log("[ERROR at DELETE /api/products/:productId]", error);

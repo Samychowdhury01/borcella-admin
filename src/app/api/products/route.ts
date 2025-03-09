@@ -85,20 +85,21 @@ export async function POST(req: Request) {
     );
 
     // generate faq
-    const faqs = await generateFAQs(newProduct)
-       // Create product with FAQs
-       await prisma.fAQs.create({
-        data: {
-          productId: newProduct.id,
-          faqs: {
-            create: faqs.map((faq: { question: string; answer: string }) => ({
-              question: faq.question,
-              answer: faq.answer,
-            })),
-          },
+    const faqs = await generateFAQs(newProduct);
+    
+    // Create product with FAQs
+    const createdFaqs = await prisma.fAQs.create({
+      data: {
+        productId: newProduct.id,
+        faqs: {
+          create: faqs.map((faq: { question: string; answer: string }) => ({
+            question: faq.question,
+            answer: faq.answer,
+          })),
         },
-      });
-
+      },
+    });
+  
     return NextResponse.json({
       statusCode: 201,
       success: true,

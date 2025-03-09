@@ -26,6 +26,9 @@ export async function GET(
       where: {
         productId,
       },
+      include:{
+        faqs: true
+      }
     });
 
     if (!faqs) {

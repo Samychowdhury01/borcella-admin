@@ -9,7 +9,6 @@ import { getProducts } from "@/actions/product-action";
 
 const ProductsPage = async () => {
   const products = await getProducts();
-console.log(products)
   return (
     <section className="p-10">
       {/* title and new collection add button */}
