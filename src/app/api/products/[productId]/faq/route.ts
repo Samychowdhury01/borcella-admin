@@ -22,7 +22,7 @@ export async function GET(
       });
     }
 
-    const faqs = await prisma.fAQs.findMany({
+    const faqs = await prisma.fAQs.findUnique({
       where: {
         productId,
       },
