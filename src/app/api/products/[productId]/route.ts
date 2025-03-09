@@ -48,7 +48,33 @@ export async function DELETE(
         where: { id: isProductExist.faqs.id },
       });
     }
-     await prisma.product.delete({
+
+    // Remove productId from all collections
+    const collections = await prisma.collection.findMany({
+      where: {
+        productIds: {
+          has: productId,
+        },
+      },
+    });
+
+    for (const collection of collections) {
+      const updatedProductIds = collection.productIds.filter(
+        (id) => id !== productId
+      );
+      await prisma.collection.update({
+        where: {
+          id: collection.id,
+        },
+        data: {
+          productIds: {
+            set: updatedProductIds,
+          },
+        },
+      });
+    }
+
+    await prisma.product.delete({
       where: {
         id: isProductExist.id,
       },
